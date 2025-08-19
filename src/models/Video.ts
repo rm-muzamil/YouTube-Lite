@@ -6,7 +6,7 @@ export interface IVideo extends Document {
     // description: string;
     // thumbnail?: string;
     videoURL: string;
-    // owner: mongoose.Types.ObjectId;
+    owner: mongoose.Types.ObjectId;
     // likes: mongoose.Types.ObjectId[];
     uploadedAt: Date
 }
@@ -18,7 +18,7 @@ const VideoSchema = new Schema<IVideo>(
         // thumbnail: { type: String },
         videoURL: { type: String, required: true, unique: true },
         uploadedAt: { type: Date, default: Date.now() },
-        // owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
         // likes: [{ type: Schema.Types.ObjectId, ref: "User" }]
     },
     { timestamps: true }

@@ -1,21 +1,21 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { connect } from "./db";
 import User from "@/models/User";
 
 export const authOptions: NextAuthOptions = {
-    // Configure one or more authentication providers
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-        })
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
     ],
+
     callbacks: {
+        // 🔹 Called once when signing in
         async signIn({ user }) {
             await connect();
 
-            // check if user already exists
             const existingUser = await User.findOne({ email: user.email });
             if (!existingUser) {
                 await User.create({
@@ -28,16 +28,29 @@ export const authOptions: NextAuthOptions = {
 
             return true;
         },
-        async session({ session }) {
-            if (!session.user) return session;
-            await connect();
-            const dbUser = await User.findOne({ email: session.user?.email });
 
-            (session.user as any).id = dbUser?._id.toString()// attach MongoDB userId
+        // 🔹 Add MongoDB userId into the JWT
+        async jwt({ token, user }) {
+            await connect();
+
+            if (user) {
+                const dbUser = await User.findOne({ email: user.email });
+                token.id = dbUser?._id.toString(); // store userId in token
+            }
+
+            return token;
+        },
+
+        // 🔹 Expose MongoDB userId in session
+        async session({ session, token }) {
+            if (session.user) {
+                (session.user as any).id = token.id; // attach MongoDB userId
+            }
             return session;
         },
     },
-    secret: process.env.NEXTAUTH_SECRET
-}
 
-export default NextAuth(authOptions)
+    secret: process.env.NEXTAUTH_SECRET,
+};
+
+export default NextAuth(authOptions);

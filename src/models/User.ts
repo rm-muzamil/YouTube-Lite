@@ -7,6 +7,7 @@ export interface IUser extends Document {
     image?: string;
     provider: string; // "google" | "credentials"
     createdAt: Date;
+    username?: string;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -15,6 +16,7 @@ const UserSchema = new Schema<IUser>(
         email: { type: String, required: true, unique: true },
         image: String,
         provider: { type: String, required: true },
+        username: { type: String, sparse: true },
     },
     { timestamps: true }
 );
