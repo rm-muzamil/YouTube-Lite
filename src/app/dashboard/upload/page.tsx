@@ -1,10 +1,9 @@
 "use client";
-
+import React from "react";
 import { useState } from "react";
-import LoginButtton from "@/components/LoginButtton";
 import VideoList from "@/components/VideoList";
 
-export default function Home() {
+function UploadVideo() {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -32,11 +31,8 @@ export default function Home() {
       alert("Upload failed!");
     }
   };
-
   return (
-    <>
-      <h2>Home</h2>
-      <LoginButtton />
+    <div>
       <div className="p-4 border rounded-lg">
         <input
           type="text"
@@ -67,10 +63,8 @@ export default function Home() {
           Upload
         </button>
       </div>
-      <div className="p-6">
-        <h1 className="text-xl font-bold mb-4">All Videos</h1>
-        <VideoList />
-      </div>
-    </>
+    </div>
   );
 }
+
+export default UploadVideo;

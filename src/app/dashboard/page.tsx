@@ -7,9 +7,12 @@ export default function Dashboard() {
   const [videos, setVideos] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("/api/videos") // API returns only current user's videos
+    fetch("/api/videos/user-videos") // API returns only current user's videos
       .then((res) => res.json())
-      .then((data) => setVideos(data.videos));
+      .then((data) => {
+        console.log("Api data.videos: ", data);
+        setVideos(data || []);
+      });
   }, []);
 
   const handleDelete = async (id: string) => {

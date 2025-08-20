@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/authOptions"; // adjust path
 import Video from "@/models/Video";
 import { connect } from "@/lib/db";
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: { params: { id: string } }) {
     try {
         await connect()
         const session = await getServerSession(authOptions);
@@ -12,8 +12,9 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         if (!session || !session.user?.id) {
             return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
         }
+        const { id } = context.params;
 
-        const video = await Video.findById(params.id);
+        const video = await Video.findById(id);
 
         if (!video) {
             return new Response(JSON.stringify({ error: "Video not found" }), { status: 404 });
