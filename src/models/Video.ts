@@ -9,6 +9,8 @@ export interface IVideo extends Document {
     owner: mongoose.Types.ObjectId;
     // likes: mongoose.Types.ObjectId[];
     uploadedAt: Date
+    views: number;
+    viewers: mongoose.Schema.Types.ObjectId[]; // store users who viewed
 }
 
 const VideoSchema = new Schema<IVideo>(
@@ -20,6 +22,8 @@ const VideoSchema = new Schema<IVideo>(
         uploadedAt: { type: Date, default: Date.now() },
         owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
         // likes: [{ type: Schema.Types.ObjectId, ref: "User" }]
+        views: { type: Number, default: 0 },
+        viewers: [{ type: Schema.Types.ObjectId, ref: "User" }], // new
     },
     { timestamps: true }
 );

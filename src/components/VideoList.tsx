@@ -17,11 +17,11 @@ export default function VideoList() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {videos.map((video) => (
         <Link key={video._id} href={`/videos/${video._id}`}>
-          <div className="cursor-pointer hover:scale-[1.02] transition-transform">
+          <div className="cursor-pointer w-[25rem] hover:scale-[1.02] transition-transform">
             {/* Thumbnail */}
             <div className="relative w-full h-48">
               <Image
-                src={video.thumbnailURL || "/default-thumbnail.jpg"}
+                src={video.thumbnail || "/default-thumbnail.jpg"}
                 alt={video.title}
                 fill
                 className="object-cover rounded-lg"
