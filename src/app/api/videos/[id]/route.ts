@@ -10,12 +10,13 @@ interface Params {
 }
 
 export async function GET(
-    req: NextRequest, { params }: Params
+    req: NextRequest, context: any
 ) {
     try {
         await connect()
+        const { id } = context.params;
 
-        const video = await Video.findById(params.id).populate("owner", "name email image")
+        const video = await Video.findById(id).populate("owner", "name email image")
 
         if (!video) {
             return NextResponse.json({ error: "Video not found" }, { status: 404 });

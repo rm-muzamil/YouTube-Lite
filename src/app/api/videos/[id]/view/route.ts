@@ -37,13 +37,13 @@ import { connect } from "@/lib/db";
 import Video from "@/models/Video";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, context: any) {
     try {
         await connect();
 
-        const id = params?.id;
+        const { id } = context.params;
         if (!id) return NextResponse.json({ error: "Missing video ID" }, { status: 400 });
 
         const session = await getServerSession(authOptions);
