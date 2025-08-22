@@ -2,11 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { connect } from "@/lib/db";
 import Video from "@/models/Video";
+import { NextRequest } from "next/server";
 
-export async function DELETE(
-    req: Request,
-    { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     try {
         await connect();
         const session = await getServerSession(authOptions);
@@ -15,7 +13,7 @@ export async function DELETE(
             return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
         }
 
-        const { id } = params;
+        const { id } = context.params;
 
         const video = await Video.findById(id);
 
