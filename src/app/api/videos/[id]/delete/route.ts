@@ -4,7 +4,7 @@ import { connect } from "@/lib/db";
 import Video from "@/models/Video";
 import { NextRequest } from "next/server";
 
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: any) {
     try {
         await connect();
         const session = await getServerSession(authOptions);
